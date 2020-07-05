@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="slide_content_detailed_inherit" inherit_id="website_slides.slide_content_detailed" name="Slide Main Share Inherit Page">
+        
+        <xpath expr="//div[hasclass('my-3')]" position="replace">
+            
+            <div class="my-3">
+        <ul class="nav nav-tabs o_wslides_lesson_nav" role="tablist">
+            <li class="nav-item">
+                <a aria-controls="about"
+            class="nav-link active"
+            data-toggle="tab"
+            href="#about"
+            role="tab">
+                    <i class="fa fa-home"/> About
+                </a>
+            </li>
+            <li class="nav-item" t-if="slide.channel_id.allow_comment">
+                <a aria-controls="discuss"
+            class="nav-link"
+            data-toggle="tab"
+            href="#discuss"
+            role="tab">
+                    <i class="fa fa-comments-o"/> Comments (<span t-esc="slide.comments_count"/>)
+                </a>
+            </li>
+            <li class="nav-item">
+                <a aria-controls="statistic"
+            class="nav-link"
+            data-toggle="tab"
+            href="#statistic"
+            role="tab">
+                    <i class="fa fa-bar-chart"/> Statistics
+                </a>
+            </li>
+            <!--<li class="nav-item">
+                <a aria-controls="share"
+            class="nav-link"
+            data-toggle="tab"
+            href="#share"
+            role="tab">
+                    <i class="fa fa-share-alt"/> Share!!
+                </a>
+            </li>-->
+        </ul>
+        <div class="tab-content mt-3">
+            <div id="about"
+           role="tabpanel"
+           t-att-class="not comments and 'tab-pane fade in show active' or 'tab-pane fade'">
+                <div t-field="slide.description"/>
+            </div>
+            <div id="discuss"
+           role="tabpanel"
+           t-att-class="comments and 'tab-pane fade in show active' or 'tab-pane fade'">
+                <t t-call="portal.message_thread">
+                    <t t-set="object" t-value="slide"/>
+                    <t t-set="disable_composer"
+               t-value="not (slide.channel_id.can_comment and slide.channel_id.allow_comment and slide.channel_id.channel_type == 'training')"/>
+                    <t t-set="display_rating" t-value="False"/>
+                </t>
+            </div>
+            <div class="tab-pane fade"
+           id="statistic"
+           role="tabpanel"
+           t-att-slide-url="slide.website_url">
+                <div class="row">
+                    <div class="col-12 col-md">
+                        <table class="table table-sm">
+                            <tbody>
+                                <tr>
+                                    <th class="border-top-0" colspan="2">Views</th>
+                                </tr>
+                                <tr class="border-top-0">
+                                    <th class="border-top-0">
+                           <span t-esc="slide.total_views"/>
+                        </th>
+                                    <td class="border-top-0 w-100">Total Views</td>
+                                </tr>
+                                <tr>
+                                    <th>
+                           <span t-esc="slide.slide_views"/>
+                        </th>
+                                    <td>Members Views</td>
+                                </tr>
+                                <tr>
+                                    <th>
+                           <span t-esc="slide.public_views"/>
+                        </th>
+                                    <td>Public Views</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-12 col-md" t-if="slide.channel_id.allow_comment">
+                        <table class="table table-sm">
+                            <tbody>
+                                <tr>
+                                    <th class="border-top-0" colspan="2">Actions!!</th>
+                                </tr>
+                                <tr class="border-top-0">
+                                    <th class="border-top-0">
+                           <span t-esc="slide.likes"/>
+                        </th>
+                                    <td class="border-top-0 w-100">Likes!!</td>
+                                </tr>
+                                <tr>
+                                    <th>
+                           <span t-esc="slide.dislikes"/>
+                        </th>
+                                    <td>Dislikes!!!</td>
+                                </tr>
+                                <tr>
+                                    <th>
+                           <span t-esc="len(slide.website_message_ids)"/>
+                        </th>
+                                    <td>Comments</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade"
+           id="share"
+           role="tabpanel"
+           t-if="slide.website_published">
+                <h4 t-if="not slide.website_published">
+            <i class="fa fa-info-circle"/>
+                    The social sharing module will be unlocked when a moderator will allow your publication.
+                </h4>
+                <t t-if="slide.website_published">
+                    <!--<t t-call="website_slides.slide_social_media">
+                        <t t-set="slide" t-value="slide"/>
+                    </t>-->
+                    <div class="row">
+                        <div t-attf-class="col-12 #{'col-lg-6' if slide.embed_code else ''}">
+                            <!--<t t-call="website_slides.slide_social_email">
+                                <t t-set="slide" t-value="slide"/>
+                            </t>-->
+                        </div>
+                        <div class="col-12 col-lg-6" t-if="slide.embed_code">
+                            <!--<t t-call="website_slides.slide_social_embed">
+                                <t t-set="slide" t-value="slide"/>
+                            </t>-->
+                        </div>
+                    </div>
+                </t>
+            </div>
+        </div>
+    </div>
+            
+            
+        </xpath>
+        
+
+     </template>
+    
+    
+    <template id="slide_social_media_inherit" inherit_id="website_slides.slide_social_media" name="Share on Social Networks Inherit">
+        
+        <xpath expr="//div[hasclass('row')]" position="replace">
+            <div class="row">
+                    <div class="col-12 col-lg-6 mb-4">
+                <!--<h5 class="mt-0 mb-2">Share on Social Networks</h5>-->
+                <!--<t t-call="website_slides.slides_share">
+                    <t t-set="record" t-value="slide"/>
+                </t>-->
+            </div>
+            <!--<div class="col-12 col-lg-6">
+                <h5 class="mt-0 mb-2">Share Link</h5>
+                <div class="input-group">
+                    <input type="text" class="form-control o_wslides_js_share_link" id="shareLink" t-att-value="slide.website_url" readonly="readonly" onClick="this.select();"/>
+                    <div class="input-group-append">
+                        <button class="btn btn-sm btn-primary o_clipboard_button" data-clipboard-target="#shareLink">
+                            <span class="fa fa-clipboard"> Copy Text</span>
+                        </button>
+                    </div>
+                </div>
+                <span class="form-text text-muted">Use permanent link to share in social media</span>
+            </div>-->
+        </div>
+              
+        </xpath>
+    </template>
+    
+    
+    <template id="slide_fullscreen_inherit" inherit_id="website_slides.slide_fullscreen" name="Slide Fullscreen ShareB Inherit">
+        <xpath expr="//t[@t-call='website.layout']" position="replace">
+            
+            
+    <t t-call="website.layout">
+        <div class="o_wslides_fs_main d-flex flex-column font-weight-light"
+            t-att-data-channel-id="slide.channel_id.id"
+            t-att-data-channel-enroll="slide.channel_id.enroll"
+            t-att-data-signup-allowed="signup_allowed">
+
+            <div class="o_wslides_slide_fs_header d-flex flex-shrink-0 text-white">
+                <div class="d-flex">
+                    <a class="o_wslides_fs_toggle_sidebar d-flex align-items-center px-3" href="#" title="Lessons">
+                        <i class="fa fa-bars"/><span class="d-none d-md-inline-block ml-1">Lessons</span>
+                    </a>
+                    <a class="o_wslides_fs_review d-flex align-items-center px-3" t-att-href="slide.channel_id.website_url + '?active_tab=review'" title="Reviews" t-if="slide.channel_id.allow_comment">
+                        <i class="fa fa-pencil"/><span class="d-none d-md-inline-block ml-1">Write a review</span>
+                    </a>
+                    <!--<a class="o_wslides_fs_share d-flex align-items-center px-3" href="#" title="Share">
+                        <i class="fa fa-share-alt"/><span class="d-none d-md-inline-block ml-1">Share</span>
+                    </a>-->
+                </div>
+                <div class="d-flex ml-auto">
+                    <a class="d-flex align-items-center px-3 o_wslides_fs_exit_fullscreen" t-attf-href="/slides/slide/#{slug(slide)}">
+                        <i class="fa fa-sign-out d-md-none"/><span class="d-none d-md-inline-block ml-1">Exit Fullscreen</span>
+                    </a>
+                    <a class="d-flex align-items-center px-3" t-attf-href="/slides/#{slug(slide.channel_id)}">
+                        <i class="fa fa-home d-md-none"/><span class="d-none d-md-inline-block ml-1">Back to course</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="o_wslides_fs_container d-flex position-relative overflow-hidden flex-grow-1">
+                <div class="o_wslides_fs_content align-items-stretch justify-content-center d-flex flex-grow-1 order-2"></div>
+
+                <div class="o_wslides_fs_sidebar o_wslides_fs_sidebar_hidden text-white flex-shrink-0 order-1">
+                    <div class="o_wslides_fs_sidebar_content d-flex flex-column px-3 pt-3 h-100">
+                        <div class="o_wslides_fs_sidebar_header mb-3">
+                            <a class="h5 d-block mb-1" t-attf-href="/slides/#{slug(slide.channel_id)}">
+                                <span t-field="slide.channel_id.name"/>
+                            </a>
+                            <div t-if="not is_public_user" class="d-flex align-items-center">
+                                <div class="progress flex-grow-1 bg-black-50" style="height: 6px;">
+                                    <div class="progress-bar" role="progressbar" t-attf-style="width: #{slide.channel_id.completion}%" t-att-aria-valuenow="slide.channel_id.completion" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <div class="ml-3 small">
+                                    <span class="o_wslides_progress_percentage" t-esc="slide.channel_id.completion"/> %
+                                </div>
+                            </div>
+                        </div>
+                        <ul class="mx-n3 list-unstyled my-0 pb-2 overflow-auto">
+                            <t t-foreach="category_data" t-as="category">
+                                <t t-if="category.get('slides')">
+                                    <t t-call="website_slides.slide_fullscreen_sidebar_category">
+                                        <t t-set="slides" t-value="category['slides']"/>
+                                        <t t-set="current_slide" t-value="slide"/>
+                                    </t>
+                                </t>
+                            </t>
+                        </ul>
+                    </div>
+                    <a href="#" class="o_wslides_fs_toggle_sidebar d-lg-none bg-black-50"/>
+                </div>
+            </div>
+        </div>
+    </t>
+             
+             
+             
+             
+             
+        </xpath>
+    </template>
+    
+    <!-- Just Kssad! -->
+    
+    <template id="slides_share_inherit" inherit_id="website_slides.slides_share" name="Slide  Share Inherit">
+        <xpath expr="//div[hasclass('btn-group')]" position="replace">
+    
+        </xpath>
+        
+</template>
+        
+    
+        <template id="slide_social_media_inherit" inherit_id="website_slides.slide_social_media" name="Share on Social Networks Inherit">
+            
+        <xpath expr="//div[hasclass('row')]" position="replace">
+        </xpath>
+            
+</template>
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+</odoo>
+

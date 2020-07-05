@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="homepage_custom" name="Home Page Custom">
+            <t t-call="portal.portal_layout">
+            <t t-set="my_details" t-value="True"/>
+            <h3> Hello Home Page </h3>
+         </t>
+    </template>
+</odoo>
