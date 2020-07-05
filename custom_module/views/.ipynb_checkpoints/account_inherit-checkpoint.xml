@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="account_inherit" inherit_id="portal.portal_my_details" name="Account Inherit Page">
+        <xpath expr="//label[@for='company_name']/.." position="replace">
+        </xpath>
+        
+        
+        <xpath expr="//label[@for='vat']/.." position="replace">    
+            <div t-attf-class="form-group col-xl-6">
+                <label class="col-form-label" for="name">Age</label>
+                <input type="text" name="age" t-attf-class="form-control" t-att-value="age or partner.age" />
+            </div>
+        </xpath>
+        
+        <xpath expr="//label[@for='zipcode']/.." position="replace">    
+        </xpath>
+        
+     </template>
+    
+    
+     <template id="auth_signup_inherit" inherit_id="auth_signup.fields" name="Auth SignUp Inherit ">
+        <xpath expr="//label[@for='name']/.." position="after">
+            <div class="form-group field-name">
+                 <label class="col-form-label" for="phone">Phone</label>
+                <input type="tel" name="phone" t-attf-class="form-control" t-att-value="phone" />
+            </div>              
+         </xpath>
+        
+     </template>
+    
+    
+    
+    
+</odoo>
+
