@@ -1,0 +1,77 @@
+<odoo>
+  <data>        
+      <record id="survey_question_form_inherit" model="ir.ui.view">
+            <field name="name">Form view for survey question inherited</field>
+            <field name="model">survey.question</field>
+            <field name = "inherit_id" ref = 'survey.survey_question_form'/>
+            <field name="arch" type="xml">
+                <xpath expr = "/form/sheet/notebook/page" position = 'inside'>
+                    <field name="validate_text" attrs="{'invisible': [('question_type', '!=', 'textbox')]}"/>
+                    <label for="validate_text" attrs="{'invisible': [('question_type', '!=', 'textbox')]}"/>
+                    <div attrs="{'invisible': [('validate_text', '=', False)]}">
+                       <group>
+                    <field name="value_validate"/>
+                    <field name="answer_score"/>
+                        </group>
+                    </div>
+                </xpath>
+          </field>
+      </record>
+    <!-- explicit list view definition -->
+<!--
+    <record model="ir.ui.view" id="survey_text_validation.list">
+      <field name="name">survey_text_validation list</field>
+      <field name="model">survey_text_validation.survey_text_validation</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="value"/>
+          <field name="value2"/>
+        </tree>
+      </field>
+    </record>
+-->
+
+    <!-- actions opening views on models -->
+<!--
+    <record model="ir.actions.act_window" id="survey_text_validation.action_window">
+      <field name="name">survey_text_validation window</field>
+      <field name="res_model">survey_text_validation.survey_text_validation</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+-->
+
+    <!-- server action to the one above -->
+<!--
+    <record model="ir.actions.server" id="survey_text_validation.action_server">
+      <field name="name">survey_text_validation server</field>
+      <field name="model_id" ref="model_survey_text_validation_survey_text_validation"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": model._name,
+        }
+      </field>
+    </record>
+-->
+
+    <!-- Top menu item -->
+<!--
+    <menuitem name="survey_text_validation" id="survey_text_validation.menu_root"/>
+-->
+    <!-- menu categories -->
+<!--
+    <menuitem name="Menu 1" id="survey_text_validation.menu_1" parent="survey_text_validation.menu_root"/>
+    <menuitem name="Menu 2" id="survey_text_validation.menu_2" parent="survey_text_validation.menu_root"/>
+-->
+    <!-- actions -->
+<!--
+    <menuitem name="List" id="survey_text_validation.menu_1_list" parent="survey_text_validation.menu_1"
+              action="survey_text_validation.action_window"/>
+    <menuitem name="Server to list" id="survey_text_validation" parent="survey_text_validation.menu_2"
+              action="survey_text_validation.action_server"/>
+-->
+  </data>
+</odoo>
