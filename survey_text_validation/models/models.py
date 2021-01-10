@@ -4,7 +4,7 @@ from odoo import models, fields, api
 
 class SurveyQuestion(models.Model):
     _inherit = 'survey.question'
-    validate_text = fields.Boolean('Validate text input')
+    validate_text = fields.Boolean('Validate text')
     value_validate = fields.Char('Validation Text')
     answer_score = fields.Float('Score', help="Score value for a correct answer to this question.")
 
@@ -61,57 +61,15 @@ class SurveyUserInputLine(models.Model):
         return super(SurveyUserInputLine, self).write(vals)
 
     
-class Survey(models.Model):
-    _inherit = 'survey.survey'
-    def _get_answers_correctness(self, user_answers):
-        if not user_answers.mapped('survey_id') == self:
-            raise UserError(_('Invalid performance computation'))
-
-        res = dict((user_answer, {
-            'correct': 0,
-            'incorrect': 0,
-            'partial': 0,
-            'skipped': 0,
-        }) for user_answer in user_answers)
-
-        scored_questions = self.question_ids
-        
-        for question in scored_questions:
-            if question.question_type in ['simple_choice', 'multiple_choice']:
-                question_answer_correct = question.labels_ids.filtered(lambda answer: answer.is_correct)
-            
-            elif question.question_type == 'textbox' and question.validate_text == True:
-                question_answer_correct = question.labels_ids
-                
-            for user_answer in user_answers:
-                if question not in user_answer.question_ids:
-                    # the question may be in the survey, but not be selected by the random selection
-                    continue
-
-                user_answer_lines_question = user_answer.user_input_line_ids.filtered(lambda line: line.question_id == question)
-                user_answer_correct = user_answer_lines_question.filtered(lambda line: line.answer_is_correct and not line.skipped).mapped('value_suggested')
-                user_answer_incorrect = user_answer_lines_question.filtered(lambda line: not line.answer_is_correct and not line.skipped)
-                user_answer_lines_textquestion = user_answer.user_input_line_ids.filtered(lambda line: line.question_id == question)
-
-                if question.question_type in ['simple_choice', 'multiple_choice']:
-                    if question_answer_correct and user_answer_correct == question_answer_correct:
-                        res[user_answer]['correct'] += 1
-                    elif user_answer_correct and user_answer_correct < question_answer_correct:
-                        res[user_answer]['partial'] += 1
-                    if not user_answer_correct and user_answer_incorrect:
-                        res[user_answer]['incorrect'] += 1
-                    if not user_answer_correct and not user_answer_incorrect:
-                        res[user_answer]['skipped'] += 1  
-                
-                elif question.question_type == 'textbox' and question.validate_text == True:
-                    if question_answer_correct.value_validate == user_answer_lines_question.value_text:
-                        res[user_answer]['correct'] += 1
-                    if question_answer_correct.value_validate != user_answer_lines_question.value_text:
-                        res[user_answer]['incorrect'] += 1
-                    else:
-                        res[user_answer]['skipped'] += 1
-                    
-        return res
+    @api.depends('value_text','value_suggested', 'question_id')
+    def _compute_answer_is_correct(self):
+        for answer in self:
+            if answer.value_suggested and answer.question_id.question_type in ['simple_choice', 'multiple_choice']:
+                answer.answer_is_correct = answer.value_suggested.is_correct
+            elif answer.value_text and answer.question_id.validate_text == True and answer.value_text.lower() == answer.question_id.value_validate.lower():
+                answer.answer_is_correct = True
+            else:
+                answer.answer_is_correct = False
     
 # class survey_text_validation(models.Model):
 #     _name = 'survey_text_validation.survey_text_validation'
