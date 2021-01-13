@@ -14,6 +14,7 @@ from odoo.http import request
 from odoo.addons.portal.controllers.portal import CustomerPortal
 from odoo.http import route
 
+_logger = logging.getLogger(__name__)
 
 class CustomerPortalInherit(CustomerPortal):
     OPTIONAL_BILLING_FIELDS = ["zipcode", "state_id", "vat", "company_name","age"]
